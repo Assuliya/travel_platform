@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Travel</title>
+    {% load static %}
+     <link rel="stylesheet" href="{% static 'travel/css/main.css'%}">
+     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <h2>Welcome!</h2>
+        {% if messages %}
+            <div class="errors">
+              {% for message in messages %}
+                <h4{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</h4>
+              {% endfor %}
+            </div>
+        {% endif %}
+        {% if request.session.user%}
+            <h2>You're successfully logged in!</h2>
+            <a href="{% url 'user' %}">My Page</a>
+            <a href="{% url 'logout'%}">Logout</a>
+        {% endif %}
+        {% if not request.session.user%}
+           <h3>Register</h3>
+           <form action="{% url 'register_process' %}" method='post'>
+             {% csrf_token %}
+             Username: <input type="text" name="username">
+             Password: <input type="password" name="password">
+             Confirm PW: <input type="password" name="repeat">
+             <input type="submit" value="Register">
+             <br>
+             *password should be at least 8 characters and contain upper case letters and numbers
+           </form>
+           <h3>Login</h3>
+           <form action="{% url 'login_process' %}" method='post'>
+              {% csrf_token %}
+              Username: <input type="text" name="username">
+              Password: <input type="password" name="password">
+              <input type="submit" value="Login">
+           </form>
+        {% endif %}
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Travel</title>
+    {% load static %}
+     <link rel="stylesheet" href="{% static 'travel/css/main.css'%}">
+     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <h1>travel</h1>
+    <h2>{{travel.destination}}</h2>
+    <p>Planned By: {{travel.user_id.name}}</p>
+    <p>Description: {{travel.plan}}</p>
+    <p>Travel Date From: {{travel.start}}</p>
+    <p>Travel Date To: {{travel.end}}</p>
+    <h3>Other user's joining the trip</h3>
+    {%  for join in joins %}
+      {% if request.session.user != join.user_id.id%}
+        <p>{{join.user_id.name}}</p>
+      {% endif %}
+    {% endfor %}
+    <a href="{% url 'user'%}">Home</a>
+    <a href="{% url 'logout'%}">Logout</a>
+  </body>

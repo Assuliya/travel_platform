@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Travel</title>
+    {% load static %}
+     <link rel="stylesheet" href="{% static 'travel/css/main.css'%}">
+     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <h1>Main</h1>
+    {% if request.session.user %}
+      <a href="{% url 'add'%}">Add Travel Plan</a>
+      <a href="{% url 'logout'%}">Logout</a>
+    {% else %}
+      <a href="{% url 'login'%}">Register/Login</a>
+    {% endif %}
+    <h3>Travel Plans</h3>
+    <table>
+        <thead>
+           <tr>
+             <th>Name</th>
+             <th>Destination</th>
+             <th>Travel Start Date</th>
+             <th>Travel End Date</th>
+             <th>Do you want to join?</th>
+           </tr>
+        </thead>
+        <tbody>
+            {%  for plan in other %}
+              {% if plan.user_id.id != request.session.user %}
+                 <tr>
+                   <th>{{plan.user_id.name}}</th>
+                   <th><a href="{% url 'travel' travel_id=plan.id%}">{{plan.destination}}</a></th>
+                   <th>{{plan.start}}</th>
+                   <th>{{plan.end}}</th>
+                   <th><a href="{% url 'join' travel_id=plan.id%}">Join</a></th>
+                 </tr>
+              {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+
+  </body>
