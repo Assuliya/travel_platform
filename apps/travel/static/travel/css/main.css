@@ -1,0 +1,32 @@
+.bg-1 {
+    background-color: lightgrey; /* Green */
+    color: #ffffff;
+
+}
+
+.bg-2 {
+    background-color: #2f2f2f;
+    color: #ffffff;
+}
+
+li {
+  color: white;
+  border-bottom: solid grey 1px;
+  padding: 5px;
+  list-style-type: none;
+}
+ul{
+  padding: 0;
+  margin: 0;
+}
+
+li:hover {
+  background-color: #000 !important;
+}
+
+.nav {
+  width: 140px;
+  position: fixed;
+  border-radius: 0;
+  height: 100%;
+}
