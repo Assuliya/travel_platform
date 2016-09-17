@@ -20,8 +20,9 @@
       {% endfor %}
     </div>
 {% endif %}
-<form action="{% url 'add_travel' %}" method='post'>
+<form action="{% url 'add_travel' %}" method='post' enctype="multipart/form-data">
    {% csrf_token %}
+   Image:<input type="file" name="image">
    Destination: <input type="text" name="destination">
    Description: <input type="text" name="plan">
    Travel Date From: <input type="date" name="start" min="{{time}}">

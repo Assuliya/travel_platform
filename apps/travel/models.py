@@ -62,15 +62,21 @@ class User(models.Model):
       objects = models.Manager()
       manager = UserManager()
 
+      def __unicode__(self):
+          return u"%s" % (self.username)
+
 class Travel(models.Model):
       destination = models.CharField(max_length=255)
       plan = models.TextField(max_length=500)
       start = models.DateField()
       end = models.DateField()
-      travel_image = models.ImageField(upload_to='travel/', default = 'user/no.jpg', null=True, blank=True)
+      travel_image = models.ImageField(upload_to='travel/', default = 'travel/no.jpg', null=True, blank=True)
       user_id = models.ForeignKey(User, related_name='travel_create')
       created_at = models.DateTimeField(auto_now_add=True)
       updated_at = models.DateTimeField(auto_now=True)
+
+      def __unicode__(self):
+          return u"%s" % (self.destination)
 
 class Join(models.Model):
       travel_id = models.ForeignKey(Travel, related_name='join_travel')

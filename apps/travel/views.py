@@ -90,8 +90,15 @@ def add_travel(request):
         print errors
         print_messages(request, errors)
         return redirect(reverse('add'))
+
     creator = User.objects.get(id = request.session['user'])
-    travel = Travel.objects.create(user_id = creator, destination=request.POST['destination'], plan=request.POST['plan'], start=request.POST['start'], end=request.POST['end'])
+
+    if 'image' in request.FILES:
+        # request.FILES['image'].name = creator.username + "_" + request.POST['destination'][:8]
+        Travel.objects.create(travel_image = request.FILES['image'], user_id = creator, destination=request.POST['destination'], plan=request.POST['plan'], start=request.POST['start'], end=request.POST['end'])
+    else:
+        Travel.objects.create(user_id = creator, destination=request.POST['destination'], plan=request.POST['plan'], start=request.POST['start'], end=request.POST['end'])
+
     return redirect(reverse('user'))
 
 def join(request, travel_id):
