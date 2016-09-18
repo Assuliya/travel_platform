@@ -18,14 +18,13 @@ def main(request):
         user = User.objects.get(id = request.session['user'])
         start = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('start')[:6]
         latest = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('-created_at')[:6]
-
+        popular = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')[:6]
     else:
         user = User.objects.all()
         start = Travel.objects.order_by('start')[:6]
         latest = Travel.objects.order_by('start')[:6]
+        popular = Travel.objects.values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')[:6]
 
-    popular = Travel.objects.values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')[:6]
-    # print(popular[1]['user_id'])
     context = {'start':start, 'latest':latest, 'popular':popular, 'user':user}
     return render(request, 'travel/main.html', context)
 

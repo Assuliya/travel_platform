@@ -11,18 +11,100 @@
      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <h1>travel</h1>
-    <h2>{{travel.destination}}</h2>
-    <p>Planned By: {{travel.user_id.name}}</p>
-    <p>Description: {{travel.plan}}</p>
-    <p>Travel Date From: {{travel.start}}</p>
-    <p>Travel Date To: {{travel.end}}</p>
-    <h3>Other user's joining the trip</h3>
-    {%  for join in joins %}
-      {% if request.session.user != join.user_id.id%}
-        <p>{{join.user_id.name}}</p>
-      {% endif %}
-    {% endfor %}
-    <a href="{% url 'user'%}">Home</a>
-    <a href="{% url 'logout'%}">Logout</a>
+    <div class="container-fluid bg-1">
+      <div class="row">
+        <div class="col-sm-2 nav-space">
+          <div class="nav nav-pills nav-stacked">
+            <img src='{{user.user_image.url}}' onError="this.onerror=null;this.src='/media/user/anonym.jpg';" class="img-responsive" style="width:100%" alt="piture">
+            <ul>
+              {% if request.session.user %}
+              <h3>{{user.username}}</h3>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'main'%}"><div>Main Page</div></a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'user'%}"><div>My Page</div></a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'logout'%}"><div>Logout</div></a>
+              </li>
+              {% else %}
+              <h3>Unknown User</h3>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'main'%}"><div>Main Page</div></a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'login'%}"><div>Register/Login</div></a>
+              </li>
+              <p>You have to login to be able to add a travel</p>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-10">
+          <h1 class="">TRAVEL PAGE</h1>
+          <br>
+          <div class="row">
+            <div class="col-sm-10 black">
+              <h2>{{travel.destination}}</h2>
+              <img src='{{travel.travel_image.url}}' class="img-responsive" style="width:40%" alt="piture">
+              
+              <p>Planned By: {{travel.user_id.username}}</p>
+              <p>Description: {{travel.plan}}</p>
+              <p>Travel Date From: {{travel.start}}</p>
+              <p>Travel Date To: {{travel.end}}</p>
+              <h3>Other user's joining the trip</h3>
+              {%  for join in joins %}
+                {% if request.session.user != join.user_id.id%}
+                  <p>{{join.user_id.username}}</p>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          <br><br><br>
+
+          <footer class="container-fluid bg-2">
+            <br>
+             <div class="row">
+                <div class="col-sm-4">
+                  <h2>Footer</h2>
+                  <p>fsafsf asdfdsf safasfs</p>
+                  <p>Site by <a href="#">Tetiana Nesterchuk</a></p>
+                </div>
+                <div class="col-sm-4">
+                  <h2>Blog Post</h2>
+                  <ul class="">
+                    <li><a href="#">
+                      <div class="row">
+                        <div class="col-sm-5">
+                          <img src='{% static "travel/images/bird2.jpg"%}' class="img-responsive" style="width:100%" alt="bird">
+                        </div>
+                        <div class="col-sm-2">
+                          <p>Mingsum</p><br>
+                        </div>
+                      </div>
+                    </a></li>
+                    <li><a href="#">
+                      <div class="row">
+                        <div class="col-sm-5">
+                          <img src='{% static "travel/images/bird2.jpg"%}' class="img-responsive" style="width:100%" alt="bird">
+                        </div>
+                        <div class="col-sm-2">
+                          <p>Mingsum</p><br>
+                        </div>
+                      </div>
+                    </a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-4">
+                   <h2>Tags</h2>
+                   <p>fsafsf asdfdsf safasfs</p>
+                </div>
+             </div>
+           <br><br>
+         </footer>
+        </div>
+      </div>
+    </div>
   </body>

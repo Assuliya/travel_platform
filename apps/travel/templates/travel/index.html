@@ -1,145 +1,16 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Travel</title>
-    {% load static %}
-     <link rel="stylesheet" href="{% static 'travel/css/main.css'%}">
-     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  </head>
-  <body>
-
-    {% load static %}
-    <div class="container-fluid bg-1">
-      <div class="row">
-        <div class="col-sm-2">
-          <div class="nav nav-pills nav-stacked">
-            <img src='{% static "travel/images/bird.jpg"%}' class="img-responsive" style="width:100%" alt="bird">
-            <h3>header</h3>
-            <p>About:</p>
-            <ul>
-              <li class="nav-item">
-                <a class="nav-link active" href="#">Active</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="#">Active</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="col-sm-10">
-          <h1 class="">MY Portfolio</h1>
-          <h2 class="">Filter: <span class="badge">filter</span></h2>
-          <br><br>
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="thumbnail">
-                <img src='{% static "travel/images/bird4.jpg"%}' class="img-responsive" style="width:100%" alt="bird">
-                <h3>header</h3>
-                <p>About:</p>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="thumbnail">
-                <img src='{{user.image.url}}' onError="this.onerror=null;this.src='/media/user/anonym.jpg';" class="img-responsive" style="width:100%" alt="piture">
-                <h3>header</h3>
-                <p>About:</p>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="thumbnail">
-                <img src='{{user.image.url}}' onError="this.onerror=null;this.src='/media/user/anonym.jpg';" class="img-responsive" style="width:100%" alt="piture">
-                <h3>header</h3>
-                <p>About:</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="thumbnail">
-                <img src='{% static "travel/images/bird3.jpg"%}' class="img-responsive" style="width:100%" alt="bird">
-                <h3>header</h3>
-                <p>About:</p>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="thumbnail">
-                <img src='{{user.image.url}}' onError="this.onerror=null;this.src='/media/user/anonym.jpg';" class="img-responsive" style="width:100%" alt="piture">
-                <h3>header</h3>
-                <p>About:</p>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="thumbnail">
-                <img src='{{user.image.url}}' onError="this.onerror=null;this.src='/media/user/anonym.jpg';" class="img-responsive" style="width:100%" alt="piture">
-                <h3>header</h3>
-                <p>About:</p>
-              </div>
-            </div>
-          </div>
-          <h3 class="text-center">Page numbers</h3>
-
-
-          <footer class="container-fluid bg-2">
-            <br>
-             <div class="row">
-                <div class="col-sm-4">
-                  <h2>Footer</h2>
-                  <p>fsafsf asdfdsf safasfs</p>
-                  <p>Site by <a href="#">Tetiana Nesterchuk</a></p>
-                </div>
-                <div class="col-sm-4">
-                  <h2>Blog Post</h2>
-                  <ul class="">
-                    <li><a href="#">
-                      <div class="row">
-                        <div class="col-sm-5">
-                          <img src='{% static "travel/images/bird2.jpg"%}' class="img-responsive" style="width:100%" alt="bird">
-                        </div>
-                        <div class="col-sm-2">
-                          <p>Mingsum</p><br>
-                        </div>
-                      </div>
-                    </a></li>
-                    <li><a href="#">
-                      <div class="row">
-                        <div class="col-sm-5">
-                          <img src='{% static "travel/images/bird2.jpg"%}' class="img-responsive" style="width:100%" alt="bird">
-                        </div>
-                        <div class="col-sm-2">
-                          <p>Mingsum</p><br>
-                        </div>
-                      </div>
-                    </a></li>
-                  </ul>
-                </div>
-                <div class="col-sm-4">
-                   <h2>Tags</h2>
-                   <p>fsafsf asdfdsf safasfs</p>
-                </div>
-             </div>
-           <br><br>
-         </footer>
-        </div>
-      </div>
-    </div>
-
-  </body>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Travel</title>
+   {% load static %}
+   <link rel="stylesheet" href="{% static 'travel/css/main.css'%}">
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <h1>LANDING PAGE</h1>
+</body>
 </html>

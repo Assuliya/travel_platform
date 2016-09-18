@@ -88,7 +88,7 @@
           <h3 class="">Most Popular: </span></h2>
           <div class="row">
             {%  for plan in popular %}
-              {% if plan.join_travel__user_id_id != request.session.user and plan.user_id_id != request.session.user%}
+              {% if plan.user_id_id != request.session.user%}
                 <div class="col-sm-4">
                   <div class="thumbnail">
                     <img src='/media/{{plan.travel_image}}' class="img-responsive" style="width:100%" alt="piture">
