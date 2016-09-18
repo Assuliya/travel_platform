@@ -7,10 +7,10 @@
 .bg-2 {
     background-color: #2f2f2f;
     color: #ffffff;
+    padding-right: 10px !important;
 }
 
 li {
-  color: white;
   border-bottom: solid grey 1px;
   padding: 5px;
   list-style-type: none;
@@ -29,4 +29,20 @@ li:hover {
   position: fixed;
   border-radius: 0;
   height: 100%;
+  width: 17%;
+  background-color: white !important;
+  color: black !important;
+  padding: 5px !important;
+
+}
+
+.nav-space {
+  padding: 0 !important;
+  margin: 0 !important;
+
+}
+
+.thumbnail{
+  /*background-color: green !important;*/
+  color: black !important;
 }

@@ -11,64 +11,133 @@
      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <h1>user</h1>
-    <h2>Hello, {{user.name}}!</h2>
-    <h3>Your Trip Schedules</h3>
-    <table>
-       <thead>
-         <tr>
-           <th>Destination</th>
-           <th>Travel Start Date</th>
-           <th>Travel End Date</th>
-           <th>Plan</th>
-         </tr>
-       </thead>
-       <tbody>
-          {% for travel in travels %}
-             <tr>
-               <th><a href="{% url 'travel' travel_id=travel.id%}">{{travel.destination}}</th>
-      				 <th>{{travel.start}}</th>
-               <th>{{travel.end}}</th>
-               <th>{{travel.plan }}</th>
-             </tr>
-          {% endfor %}
-          {%  for join in joins %}
-            <tr>
-              <th><a href="{% url 'travel' travel_id=join.travel_id.id%}">{{join.travel_id.destination}}</a></th>
-              <th>{{join.travel_id.start}}</th>
-              <th>{{join.travel_id.end}}</th>
-              <th>{{join.travel_id.plan }}</th>
-            </tr>
-          {% endfor %}
-       </tbody>
-    </table>
-    <br>
-    <a href="{% url 'add'%}">Add Travel Plan</a>
-    <h3>Recomended Plans</h3>
-    <table>
-        <thead>
-           <tr>
-             <th>Name</th>
-             <th>Destination</th>
-             <th>Travel Start Date</th>
-             <th>Travel End Date</th>
-             <th>Do you want to join?</th>
-           </tr>
-        </thead>
-        <tbody>
-            {%  for plan in other %}
-              {% if plan.user_id.id != request.session.user %}
-                 <tr>
-                   <th>{{plan.user_id.name}}</th>
-                   <th><a href="{% url 'travel' travel_id=plan.id%}">{{plan.destination}}</a></th>
-                   <th>{{plan.start}}</th>
-                   <th>{{plan.end}}</th>
-                   <th><a href="{% url 'join' travel_id=plan.id%}">Join</a></th>
-                 </tr>
+    <div class="container-fluid bg-1">
+      <div class="row">
+        <div class="col-sm-2 nav-space">
+          <div class="nav nav-pills nav-stacked">
+            <img src='{{user.user_image.url}}' onError="this.onerror=null;this.src='/media/user/anonym.jpg';" class="img-responsive" style="width:100%" alt="piture">
+            <h3>{{user.username}}</h3>
+            <ul>
+              {% if request.session.user %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'main'%}">Main Page</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'add'%}">Add Travel Plan</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'logout'%}">Logout</a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a href="{% url 'login'%}">Register/Login</a>
+              </li>
+              <p>You have to login to be able to add or join a travel</p>
               {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <a href="{% url 'logout'%}">Logout</a>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-10">
+          <h1 class="">USER PAGE</h1>
+          <h2 class="">Welcome to your page, {{user.username}}!</h2>
+          <h2 class="">Filter: <span class="badge">filter</span></h2>
+          <br><br>
+          <h3 class="">My travels:</h3>
+          <div class="row">
+            {% if travels %}
+              {% for travel in travels %}
+                <div class="col-sm-4">
+                  <div class="thumbnail">
+                    <img src='{{travel.travel_image.url}}' class="img-responsive" style="width:100%" alt="piture">
+                    <h3><a href="{% url 'travel' travel_id=travel.id%}">{{travel.destination}}</a></h3>
+                    <p>About: {{travel.plan }}</p>
+                    <p>{{plan.user_id.username}}</p>
+                    <p>Start Date:{{travel.start}}</p>
+                    <p>End Date:{{travel.end}}</p>
+                  </div>
+                </div>
+                {% if forloop.counter|divisibleby:3 %}
+                  </div>
+                  <div class="row">
+                {% endif %}
+              {% endfor %}
+              {% else %}
+              <div class="col-sm-4">
+                <p>You have no travels yet</p>
+              </div>
+            {% endif %}
+          </div>
+          <h3 class="">Joined travels:</h3>
+          <div class="row">
+            {% if joins %}
+              {%  for join in joins %}
+                <div class="col-sm-4">
+                  <div class="thumbnail">
+                    <img src='{{join.travel_id.travel_image.url}}' class="img-responsive" style="width:100%" alt="piture">
+                    <h3><a href="{% url 'travel' travel_id=join.travel_id.id%}">{{join.travel_id.destination}}</a></h3>
+                    <p>About: {{join.travel_id.plan }}</p>
+                    <p>{{plan.user_id.username}}</p>
+                    <p>Start Date:{{join.travel_id.start}}</p>
+                    <p>End Date:{{join.travel_id.end}}</p>
+                  </div>
+                </div>
+                {% if forloop.counter|divisibleby:3 %}
+                  </div>
+                  <div class="row">
+                {% endif %}
+              {% endfor %}
+              {% else %}
+              <div class="col-sm-4">
+                <p>You haven't joined other user's travels yet</p>
+              </div>
+            {% endif %}
+          </div>
+          <h3 class="text-center">Page numbers</h3>
+
+
+          <footer class="container-fluid bg-2">
+            <br>
+             <div class="row">
+                <div class="col-sm-4">
+                  <h2>Footer</h2>
+                  <p>fsafsf asdfdsf safasfs</p>
+                  <p>Site by <a href="#">Tetiana Nesterchuk</a></p>
+                </div>
+                <div class="col-sm-4">
+                  <h2>Blog Post</h2>
+                  <ul class="">
+                    <li><a href="#">
+                      <div class="row">
+                        <div class="col-sm-5">
+                          <img src='{% static "travel/images/bird2.jpg"%}' class="img-responsive" style="width:100%" alt="bird">
+                        </div>
+                        <div class="col-sm-2">
+                          <p>Mingsum</p><br>
+                        </div>
+                      </div>
+                    </a></li>
+                    <li><a href="#">
+                      <div class="row">
+                        <div class="col-sm-5">
+                          <img src='{% static "travel/images/bird2.jpg"%}' class="img-responsive" style="width:100%" alt="bird">
+                        </div>
+                        <div class="col-sm-2">
+                          <p>Mingsum</p><br>
+                        </div>
+                      </div>
+                    </a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-4">
+                   <h2>Tags</h2>
+                   <p>fsafsf asdfdsf safasfs</p>
+                </div>
+             </div>
+           <br><br>
+         </footer>
+        </div>
+      </div>
+    </div>
+
   </body>

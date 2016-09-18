@@ -57,7 +57,7 @@ def login_process(request):
     result = User.manager.validateLogin(request)
     if result[0] == False:
         print_messages(request, result[1])
-        return redirect(reverse('index'))
+        return redirect(reverse('main'))
     return log_user_in(request, result[1])
 
 def print_messages(request, message_list):
@@ -71,7 +71,7 @@ def log_user_in(request, user):
 def logout(request):
     user = User.manager.get(id=request.session['user'])
     request.session.pop('user')
-    return redirect(reverse('index'))
+    return redirect(reverse('main'))
 
 def add_travel(request):
     errors = []
