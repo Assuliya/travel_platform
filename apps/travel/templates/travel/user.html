@@ -20,19 +20,14 @@
             <ul>
               {% if request.session.user %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'main'%}">Main Page</a>
+                <a class="nav-link" href="{% url 'main'%}"><div>Main Page</div></a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'add'%}">Add Travel Plan</a>
+                <a href="{% url 'add'%}"><div>Add Travel Plan</div></a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'logout'%}">Logout</a>
+                <a href="{% url 'logout'%}"><div>Logout</div></a>
               </li>
-              {% else %}
-              <li class="nav-item">
-                <a href="{% url 'login'%}">Register/Login</a>
-              </li>
-              <p>You have to login to be able to add or join a travel</p>
               {% endif %}
             </ul>
           </div>

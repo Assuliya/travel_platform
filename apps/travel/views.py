@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
 from models import User, Travel, Join
 import bcrypt
 from datetime import date
@@ -14,10 +15,18 @@ def login(request):
 
 def main(request):
     if 'user' in request.session:
-        other = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('start')
+        user = User.objects.get(id = request.session['user'])
+        start = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('start')[:6]
+        latest = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('-created_at')[:6]
+
     else:
-        other = Travel.objects.order_by('start')
-    context = {'other':other}
+        user = User.objects.all()
+        start = Travel.objects.order_by('start')[:6]
+        latest = Travel.objects.order_by('start')[:6]
+
+    popular = Travel.objects.values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')[:6]
+    # print(popular[1]['user_id'])
+    context = {'start':start, 'latest':latest, 'popular':popular, 'user':user}
     return render(request, 'travel/main.html', context)
 
 def user(request):
@@ -48,7 +57,7 @@ def register_process(request):
     if result[0] == False or resultPass[0] == False:
         errors = result[1]+resultPass[1]
         print_messages(request, errors)
-        return redirect(reverse('index'))
+        return redirect(reverse('login'))
     pw_hash = bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt())
     user = User.manager.create(username=request.POST['username'], pw_hash=pw_hash)
     return log_user_in(request, user)
@@ -57,7 +66,7 @@ def login_process(request):
     result = User.manager.validateLogin(request)
     if result[0] == False:
         print_messages(request, result[1])
-        return redirect(reverse('main'))
+        return redirect(reverse('login'))
     return log_user_in(request, result[1])
 
 def print_messages(request, message_list):

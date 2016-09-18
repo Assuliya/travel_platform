@@ -40,8 +40,6 @@ class UserManager(models.Manager):
 	        user = self.get(username=request.POST['username'])
 	        password = user.pw_hash.encode()
 	        loginpass = request.POST['password'].encode()
-	        print password
-	        print hashpw(loginpass, password)
 	        if hashpw(loginpass, password) == password:
 	            return (True, user)
 	        else:
@@ -49,7 +47,7 @@ class UserManager(models.Manager):
 	            return (False, errors)
         except ObjectDoesNotExist:
             pass
-        errors.append("Sorry, no email found. Please try again.")
+        errors.append("Sorry, no username found. Please try again.")
         return (False, errors)
 
 
