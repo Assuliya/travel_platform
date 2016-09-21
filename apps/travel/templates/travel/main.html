@@ -118,33 +118,49 @@
                   <p>Site by <a href="#">Tetiana Nesterchuk</a></p>
                 </div>
                 <div class="col-sm-4">
-                  <h2>Blog Post</h2>
+                  <h2>Joined comming Soon</h2>
                   <ul class="">
-                    <li><a href="#">
-                      <div class="row">
-                        <div class="col-sm-5">
-                          <img src='{% static "travel/images/bird2.jpg"%}' class="img-responsive" style="width:100%" alt="bird">
-                        </div>
-                        <div class="col-sm-2">
-                          <p>Mingsum</p><br>
-                        </div>
-                      </div>
-                    </a></li>
-                    <li><a href="#">
-                      <div class="row">
-                        <div class="col-sm-5">
-                          <img src='{% static "travel/images/bird2.jpg"%}' class="img-responsive" style="width:100%" alt="bird">
-                        </div>
-                        <div class="col-sm-2">
-                          <p>Mingsum</p><br>
-                        </div>
-                      </div>
-                    </a></li>
+                    {% if joins %}
+                      {% for join in joins %}
+                        <li><a href="#">
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <img src='/media/{{join.travel_id.travel_image}}' class="img-responsive" style="width:100%" alt="piture">
+                            </div>
+                            <div class="col-sm-2">
+                              <h4>Start date:</h4>
+                              <p>{{join.travel_id.start}}</p><br>
+                            </div>
+                          </div>
+                        </a></li>
+                      {% endfor %}
+                    {% else %}
+                    <h4>No joined travels</h4>
+                    {% endif %}
                   </ul>
                 </div>
                 <div class="col-sm-4">
-                   <h2>Tags</h2>
-                   <p>fsafsf asdfdsf safasfs</p>
+                   <h2>My comming Soon</h2>
+                   <ul class="">
+                     {% if travels %}
+                       {% for travel in travels %}
+                         <li><a href="#">
+                           <div class="row">
+                             <div class="col-sm-5">
+                               <img src='/media/{{travel.travel_image}}' class="img-responsive" style="width:100%" alt="piture">
+                             </div>
+                             <div class="col-sm-2">
+                               <h4>Start date:</h4>
+                               <p>{{travel.start}}</p><br>
+                             </div>
+                           </div>
+                         </a></li>
+                       {% endfor %}
+                     {% else %}
+                     <br>
+                     <h4>No added travels</h4>
+                     {% endif %}
+                   </ul>
                 </div>
              </div>
            <br><br>
