@@ -87,6 +87,31 @@
               </div>
             {% endif %}
           </div>
+          <h3 class="">My Past travels:</h3>
+          <div class="row">
+            {% if past %}
+              {% for travel in past %}
+                <div class="col-sm-4">
+                  <div class="thumbnail">
+                    <img src='{{travel.travel_image.url}}' class="img-responsive" style="width:100%" alt="piture">
+                    <h3><a href="{% url 'travel' travel_id=travel.id%}">{{travel.destination}}</a></h3>
+                    <p>About: {{travel.plan }}</p>
+                    <p>{{plan.user_id.username}}</p>
+                    <p>Start Date:{{travel.start}}</p>
+                    <p>End Date:{{travel.end}}</p>
+                  </div>
+                </div>
+                {% if forloop.counter|divisibleby:3 %}
+                  </div>
+                  <div class="row">
+                {% endif %}
+              {% endfor %}
+              {% else %}
+              <div class="col-sm-4">
+                <p>You have no past travels yet</p>
+              </div>
+            {% endif %}
+          </div>
           <h3 class="text-center">Page numbers</h3>
 
 

@@ -6,8 +6,14 @@ from django.db.models import Count
 from models import User, Travel, Join
 import bcrypt
 from datetime import date
+import datetime
 
 def index(request):
+    travels = Travel.objects.filter(past = True)
+    for x in travels:
+        if x.end < datetime.date.today():
+            x.past = False
+            x.save()
     return render(request, 'travel/index.html')
 
 def login(request):
@@ -19,16 +25,16 @@ def login(request):
 def main(request):
     if 'user' in request.session:
         user = User.objects.get(id = request.session['user'])
-        start = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('start')[:6]
-        latest = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('-created_at')[:6]
-        popular = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')[:6]
-        travels = Travel.objects.filter(user_id = request.session['user']).order_by('-start')[:2]
+        start = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).exclude(past = False).order_by('start')[:6]
+        latest = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).exclude(past = False).order_by('-created_at')[:6]
+        popular = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).exclude(past = False).values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')[:6]
+        travels = Travel.objects.filter(user_id = request.session['user'], past = True).order_by('-start')[:2]
         joins = Join.objects.filter(user_id = request.session['user']).order_by('-travel_id__start')[:2]
     else:
         user = User.objects.all()
-        start = Travel.objects.order_by('start')[:6]
-        latest = Travel.objects.order_by('start')[:6]
-        popular = Travel.objects.values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')[:6]
+        start = Travel.objects.filter(past = True).order_by('start')[:6]
+        latest = Travel.objects.filter(past = True).order_by('start')[:6]
+        popular = Travel.objects.filter(past = True).values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')[:6]
         travels = False
         joins = False
 
@@ -39,23 +45,23 @@ def display(request, search):
     if 'user' in request.session:
         user = User.objects.get(id = request.session['user'])
         if search == 'latest':
-            display = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('-created_at')
+            display = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).exclude(past = False).order_by('-created_at')
         elif search == 'soon':
-            display = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('start')
+            display = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).exclude(past = False).order_by('start')
         elif search == 'popular':
-            display = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')
+            display = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).exclude(past = False).values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')
         else:
             return redirect(reverse('main'))
-        travels = Travel.objects.filter(user_id = request.session['user']).order_by('-start')[:2]
+        travels = Travel.objects.filter(user_id = request.session['user'], past = True).order_by('-start')[:2]
         joins = Join.objects.filter(user_id = request.session['user']).order_by('-travel_id__start')[:2]
     else:
         user = User.objects.all()
         if search == 'latest':
-            display = Travel.objects.order_by('start')
+            display = Travel.objects.filter(past = True).order_by('start')
         elif search == 'soon':
-            display = Travel.objects.order_by('start')
+            display = Travel.objects.filter(past = True).order_by('start')
         elif search == 'popular':
-            display = Travel.objects.values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')
+            display = Travel.objects.filter(past = True).values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')
         else:
             return redirect(reverse('main'))
         travels = False
@@ -68,10 +74,11 @@ def display(request, search):
 def user(request):
     if 'user' in request.session:
         user = User.objects.get(id = request.session['user'])
-        travels = Travel.objects.filter(user_id = request.session['user'])
+        travels = Travel.objects.filter(user_id = request.session['user'], past = True)
+        past = Travel.objects.filter(user_id = request.session['user'], past = False)
         joins = Join.objects.filter(user_id = request.session['user'])
-        other = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('start')
-        context = {'travels':travels, 'user':user, 'other':other, 'joins': joins}
+        other = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).exclude(past = False).order_by('start')
+        context = {'travels':travels,'past':past, 'user':user, 'other':other, 'joins': joins}
         return render(request, 'travel/user.html', context)
     return redirect(reverse('main'))
 
@@ -79,7 +86,7 @@ def travel(request, travel_id):
     travel = Travel.objects.get(id = travel_id)
     joined = Join.objects.filter(travel_id = travel_id)
     if 'user' in request.session:
-        travels = Travel.objects.filter(user_id = request.session['user']).order_by('-start')[:2]
+        travels = Travel.objects.filter(user_id = request.session['user'], past = True).order_by('-start')[:2]
         joins = Join.objects.filter(user_id = request.session['user']).order_by('-travel_id__start')[:2]
     else:
         travels = False
@@ -90,13 +97,14 @@ def travel(request, travel_id):
 def add(request):
     today = date.today()
     format_time = today.strftime('%Y-%m-%d')
+    user = User.objects.get(id = request.session['user'])
     if 'user' in request.session:
-        travels = Travel.objects.filter(user_id = request.session['user']).order_by('-start')[:2]
+        travels = Travel.objects.filter(user_id = request.session['user'], past = True).order_by('-start')[:2]
         joins = Join.objects.filter(user_id = request.session['user']).order_by('-travel_id__start')[:2]
     else:
         travels = False
         joins = False
-    context = {'time':format_time, 'travels': travels, 'joins': joins}
+    context = {'user':user, 'time':format_time, 'travels': travels, 'joins': joins}
     return render(request, 'travel/add.html', context)
 
 def register_process(request):

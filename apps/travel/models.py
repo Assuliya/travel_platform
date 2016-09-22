@@ -68,6 +68,7 @@ class Travel(models.Model):
       plan = models.TextField(max_length=500)
       start = models.DateField()
       end = models.DateField()
+      past = models.BooleanField(default = True)
       travel_image = models.ImageField(upload_to='travel/', default = 'travel/no.jpg', null=True, blank=True)
       user_id = models.ForeignKey(User, related_name='travel_create')
       created_at = models.DateTimeField(auto_now_add=True)
