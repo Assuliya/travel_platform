@@ -54,6 +54,9 @@
               <p>Description: {{travel.plan}}</p>
               <p>Travel Date From: {{travel.start}}</p>
               <p>Travel Date To: {{travel.end}}</p>
+              {% if request.session.user %}
+                <a href="{% url 'join' travel_id=travel.id%}">Join</a>
+              {% endif %}
               <h3>Other user's joining the trip</h3>
               {%  for join in joined %}
                 {% if request.session.user != join.user_id.id%}

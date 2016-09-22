@@ -31,6 +31,9 @@
               {% else %}
               <h3>Unknown User</h3>
               <li class="nav-item">
+                <a class="nav-link" href="{% url 'user'%}"><div>My Page</div></a>
+              </li>
+              <li class="nav-item">
                 <a href="{% url 'login'%}"><div>Register/Login</div></a>
               </li>
               <p>You have to login to be able to add a travel</p>
@@ -40,10 +43,11 @@
         </div>
 
         <div class="col-sm-10">
-          <h1 class="">MAIN PAGE</h1>
+          <h1 class="">Display PAGE</h1>
+          {% if result == 'latest'%}
           <h3 class="">Latest added: </span></h2>
           <div class="row">
-            {%  for plan in latest %}
+            {%  for plan in display %}
               {% if plan.user_id.id != request.session.user %}
                 <div class="col-sm-4">
                   <div class="thumbnail">
@@ -65,62 +69,62 @@
               {% endif %}
             {% endfor %}
           </div>
-          <a href="{% url 'display' search='latest'%}">See all sorted by latest added</a>
 
-          <h3 class="">Start soon: </span></h2>
-          <div class="row">
-            {%  for plan in start %}
-              {% if plan.user_id.id != request.session.user %}
-                <div class="col-sm-4">
-                  <div class="thumbnail">
-                    <img src='{{plan.travel_image.url}}' class="img-responsive" style="width:100%" alt="piture">
-                    <h3><a href="{% url 'travel' travel_id=plan.id%}">{{plan.destination}}</a></h3>
-                    <p>About: {{plan.plan}}</p>
-                    <p>{{plan.user_id.username}}</p>
-                    <p>Start Date:{{plan.start}}</p>
-                    <p>End Date:{{plan.end}}</p>
-                    {% if request.session.user %}
-                      <a href="{% url 'join' travel_id=plan.id%}">Join</a>
-                    {% endif %}
+          {% elif result == 'soon' %}
+            <h3 class="">Start soon: </span></h2>
+            <div class="row">
+              {%  for plan in display %}
+                {% if plan.user_id.id != request.session.user %}
+                  <div class="col-sm-4">
+                    <div class="thumbnail">
+                      <img src='{{plan.travel_image.url}}' class="img-responsive" style="width:100%" alt="piture">
+                      <h3><a href="{% url 'travel' travel_id=plan.id%}">{{plan.destination}}</a></h3>
+                      <p>About: {{plan.plan}}</p>
+                      <p>{{plan.user_id.username}}</p>
+                      <p>Start Date:{{plan.start}}</p>
+                      <p>End Date:{{plan.end}}</p>
+                      {% if request.session.user %}
+                        <a href="{% url 'join' travel_id=plan.id%}">Join</a>
+                      {% endif %}
+                    </div>
                   </div>
-                </div>
-                {% if forloop.counter|divisibleby:3 %}
-                  </div>
-                  <div class="row">
+                  {% if forloop.counter|divisibleby:3 %}
+                    </div>
+                    <div class="row">
+                  {% endif %}
                 {% endif %}
-              {% endif %}
-            {% endfor %}
-          </div>
-          <a href="{% url 'display' search='soon'%}">See all sorted by the starting date</a>
+              {% endfor %}
+            </div>
 
-          <h3 class="">Most Popular: </span></h2>
-          <div class="row">
-            {%  for plan in popular %}
-              {% if plan.user_id_id != request.session.user%}
-                <div class="col-sm-4">
-                  <div class="thumbnail">
-                    <img src='/media/{{plan.travel_image}}' class="img-responsive" style="width:100%" alt="piture">
-                    <h3><a href="{% url 'travel' travel_id=plan.id%}">{{plan.destination}}</a></h3>
-                    <p>Number of people joined: {{plan.count}}</p>
-                    <p>About: {{plan.plan}}</p>
-                    <p>{{plan.user_id.username}}</p>
-                    <p>Start Date:{{plan.start}}</p>
-                    <p>End Date:{{plan.end}}</p>
-                    {% if request.session.user %}
-                      <a href="{% url 'join' travel_id=plan.id%}">Join</a>
-                    {% endif %}
+          {% elif result == 'popular' %}
+            <h3 class="">Most Popular: </span></h2>
+            <div class="row">
+              {%  for plan in display %}
+                {% if plan.user_id_id != request.session.user%}
+                  <div class="col-sm-4">
+                    <div class="thumbnail">
+                      <img src='/media/{{plan.travel_image}}' class="img-responsive" style="width:100%" alt="piture">
+                      <h3><a href="{% url 'travel' travel_id=plan.id%}">{{plan.destination}}</a></h3>
+                      <p>Number of people joined: {{plan.count}}</p>
+                      <p>About: {{plan.plan}}</p>
+                      <p>{{plan.user_id.username}}</p>
+                      <p>Start Date:{{plan.start}}</p>
+                      <p>End Date:{{plan.end}}</p>
+                      {% if request.session.user %}
+                        <a href="{% url 'join' travel_id=plan.id%}">Join</a>
+                      {% endif %}
+                    </div>
                   </div>
-                </div>
-                {% if forloop.counter|divisibleby:3 %}
-                  </div>
-                  <div class="row">
+                  {% if forloop.counter|divisibleby:3 %}
+                    </div>
+                    <div class="row">
+                  {% endif %}
                 {% endif %}
-              {% endif %}
-            {% endfor %}
-          </div>
-          <a href="{% url 'display' search='popular'%}">See all sorted by popularity</a>
-          <br><br>
+              {% endfor %}
+            </div>
+            <br><br>
 
+          {% endif%}
           <footer class="container-fluid bg-2">
             <br>
              <div class="row">

@@ -18,10 +18,10 @@
             <img src='{{user.user_image.url}}' onError="this.onerror=null;this.src='/media/user/anonym.jpg';" class="img-responsive" style="width:100%" alt="piture">
             <h3>{{user.username}}</h3>
             <ul>
-              {% if request.session.user %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'main'%}"><div>Main Page</div></a>
               </li>
+              {% if request.session.user %}
               <li class="nav-item">
                 <a href="{% url 'add'%}"><div>Add Travel Plan</div></a>
               </li>

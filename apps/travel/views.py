@@ -35,6 +35,36 @@ def main(request):
     context = {'start':start, 'latest':latest, 'popular':popular, 'user':user, 'joins':joins, 'travels': travels}
     return render(request, 'travel/main.html', context)
 
+def display(request, search):
+    if 'user' in request.session:
+        user = User.objects.get(id = request.session['user'])
+        if search == 'latest':
+            display = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('-created_at')
+        elif search == 'soon':
+            display = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).order_by('start')
+        elif search == 'popular':
+            display = Travel.objects.exclude(join_travel__user_id_id = request.session['user']).values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')
+        else:
+            return redirect(reverse('main'))
+        travels = Travel.objects.filter(user_id = request.session['user']).order_by('-start')[:2]
+        joins = Join.objects.filter(user_id = request.session['user']).order_by('-travel_id__start')[:2]
+    else:
+        user = User.objects.all()
+        if search == 'latest':
+            display = Travel.objects.order_by('start')
+        elif search == 'soon':
+            display = Travel.objects.order_by('start')
+        elif search == 'popular':
+            display = Travel.objects.values('id','destination','plan','start','end','travel_image','join_travel__user_id_id','user_id_id').annotate(count=Count('join_travel__user_id_id')).order_by('-count')
+        else:
+            return redirect(reverse('main'))
+        travels = False
+        joins = False
+    result = search
+    print result
+    context = {'display':display, 'result':result, 'user':user, 'joins':joins, 'travels': travels}
+    return render(request, 'travel/display.html', context)
+
 def user(request):
     if 'user' in request.session:
         user = User.objects.get(id = request.session['user'])
