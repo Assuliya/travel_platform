@@ -67,9 +67,26 @@ def display(request, search):
         travels = False
         joins = False
     result = search
-    print result
     context = {'display':display, 'result':result, 'user':user, 'joins':joins, 'travels': travels}
     return render(request, 'travel/display.html', context)
+
+def search(request):
+    if request.method == 'GET':
+        search_query = request.GET.get('search', None)
+        if request.GET.get('by', None) == 'username':
+            result = Travel.objects.filter(user_id__username__contains = search_query)
+            print result
+        elif request.GET.get('by', None) == 'destination':
+            result = Travel.objects.filter(destination__contains = search_query)
+            print result
+        elif request.GET.get('by', None) == 'plan':
+            result = Travel.objects.filter(plan__contains = search_query)
+            print result
+        else:
+            result = False
+        context = {'result':result}
+        return render(request, 'travel/search.html', context)
+    return render(request, 'travel/main.html', context)
 
 def user(request):
     if 'user' in request.session:

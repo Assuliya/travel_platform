@@ -1,6 +1,8 @@
+
 .bg-1 {
     background-color: lightgrey; /* Green */
     color: #ffffff;
+    min-height: 550px !important;
 
 }
 

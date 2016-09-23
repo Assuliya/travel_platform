@@ -4,6 +4,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^travels$', views.main, name='main'),
     url(r'^blog/display/(?P<search>\w+)$', views.display, name='display'),
+    url(r'^travels/search$', views.search, name='search'),
     url(r'^travels/login$', views.login, name='login'),
     url(r'^travels/user$', views.user, name='user'),
     url(r'^travels/destination/(?P<travel_id>\d+)$', views.travel, name='travel'),

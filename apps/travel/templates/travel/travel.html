@@ -67,63 +67,64 @@
           </div>
           <br><br><br>
 
+        </div>
+      </div>
+    </div>
+
           <footer class="container-fluid bg-2">
             <br>
              <div class="row">
-               <div class="col-sm-4">
-                 <h2>Footer</h2>
-                 <p>fsafsf asdfdsf safasfs</p>
-                 <p>Site by <a href="#">Tetiana Nesterchuk</a></p>
-               </div>
-               <div class="col-sm-4">
-                 <h2>Joined comming Soon</h2>
-                 <ul class="">
-                   {% if joins %}
-                     {% for join in joins %}
-                       <li><a href="#">
-                         <div class="row">
-                           <div class="col-sm-5">
-                             <img src='/media/{{join.travel_id.travel_image}}' class="img-responsive" style="width:100%" alt="piture">
-                           </div>
-                           <div class="col-sm-2">
-                             <h4>Start date:</h4>
-                             <p>{{join.travel_id.start}}</p><br>
-                           </div>
-                         </div>
-                       </a></li>
-                     {% endfor %}
-                   {% else %}
-                   <h4>No joined travels</h4>
-                   {% endif %}
-                 </ul>
-               </div>
-               <div class="col-sm-4">
-                  <h2>My comming Soon</h2>
+                <div class="col-sm-offset-2 col-sm-3">
+                  <h2>Footer</h2>
+                  <p>fsafsf asdfdsf safasfs</p>
+                  <p>Site by <a href="#">Tetiana Nesterchuk</a></p>
+                </div>
+                <div class="col-sm-3">
+                  <h2>Joined comming Soon</h2>
                   <ul class="">
-                    {% if travels %}
-                      {% for travel in travels %}
+                    {% if joins %}
+                      {% for join in joins %}
                         <li><a href="#">
                           <div class="row">
                             <div class="col-sm-5">
-                              <img src='/media/{{travel.travel_image}}' class="img-responsive" style="width:100%" alt="piture">
+                              <img src='/media/{{join.travel_id.travel_image}}' class="img-responsive" style="width:100%" alt="piture">
                             </div>
                             <div class="col-sm-2">
                               <h4>Start date:</h4>
-                              <p>{{travel.start}}</p><br>
+                              <p>{{join.travel_id.start}}</p><br>
                             </div>
                           </div>
                         </a></li>
                       {% endfor %}
                     {% else %}
-                    <br>
-                    <h4>No added travels</h4>
+                    <h4>No joined travels</h4>
                     {% endif %}
                   </ul>
-               </div>
+                </div>
+                <div class="col-sm-3">
+                   <h2>My comming Soon</h2>
+                   <ul class="">
+                     {% if travels %}
+                       {% for travel in travels %}
+                         <li><a href="#">
+                           <div class="row">
+                             <div class="col-sm-5">
+                               <img src='/media/{{travel.travel_image}}' class="img-responsive" style="width:100%" alt="piture">
+                             </div>
+                             <div class="col-sm-2">
+                               <h4>Start date:</h4>
+                               <p>{{travel.start}}</p><br>
+                             </div>
+                           </div>
+                         </a></li>
+                       {% endfor %}
+                     {% else %}
+                     <br>
+                     <h4>No added travels</h4>
+                     {% endif %}
+                   </ul>
+                </div>
              </div>
            <br><br>
          </footer>
-        </div>
-      </div>
-    </div>
   </body>
