@@ -8,6 +8,14 @@ import bcrypt
 from datetime import date
 import datetime
 
+def print_messages(request, message_list):
+    for message in message_list:
+        messages.add_message(request, messages.ERROR, message)
+
+def log_user_in(request, user):
+    request.session['user'] = user.id
+    return redirect(reverse('user'))
+
 def index(request):
     travels = Travel.objects.filter(past = True)
     for x in travels:
@@ -57,7 +65,7 @@ def display(request, search):
     else:
         user = User.objects.all()
         if search == 'latest':
-            display = Travel.objects.filter(past = True).order_by('start')
+            display = Travel.objects.filter(past = True).order_by('-created_at')
         elif search == 'soon':
             display = Travel.objects.filter(past = True).order_by('start')
         elif search == 'popular':
@@ -112,17 +120,33 @@ def travel(request, travel_id):
     return render(request, 'travel/travel.html', context)
 
 def add(request):
-    today = date.today()
-    format_time = today.strftime('%Y-%m-%d')
-    user = User.objects.get(id = request.session['user'])
-    if 'user' in request.session:
-        travels = Travel.objects.filter(user_id = request.session['user'], past = True).order_by('-start')[:2]
-        joins = Join.objects.filter(user_id = request.session['user']).order_by('-travel_id__start')[:2]
-    else:
-        travels = False
-        joins = False
-    context = {'user':user, 'time':format_time, 'travels': travels, 'joins': joins}
-    return render(request, 'travel/add.html', context)
+    if request.method == 'GET':
+        today = date.today()
+        format_time = today.strftime('%Y-%m-%d')
+        user = User.objects.get(id = request.session['user'])
+        if 'user' in request.session:
+            travels = Travel.objects.filter(user_id = request.session['user'], past = True).order_by('-start')[:2]
+            joins = Join.objects.filter(user_id = request.session['user']).order_by('-travel_id__start')[:2]
+        else:
+            travels = False
+            joins = False
+        context = {'user':user, 'time':format_time, 'travels': travels, 'joins': joins}
+        return render(request, 'travel/add.html', context)
+
+    elif request.method == 'POST':
+        result = Travel.manager.validateAddTravel(request)
+        if result[0] == False:
+            errors = result[1]
+            print_messages(request, errors)
+            return redirect(reverse('add'))
+        creator = User.objects.get(id = request.session['user'])
+        if 'image' in request.FILES:
+            # No idea what this is...
+            # request.FILES['image'].name = creator.username + "_" + request.POST['destination'][:8]
+            Travel.objects.create(travel_image = request.FILES['image'], user_id = creator, destination=request.POST['destination'], plan=request.POST['plan'], start=request.POST['start'], end=request.POST['end'])
+        else:
+            Travel.objects.create(user_id = creator, destination=request.POST['destination'], plan=request.POST['plan'], start=request.POST['start'], end=request.POST['end'])
+        return redirect(reverse('user'))
 
 def register_process(request):
     result = User.manager.validateReg(request)
@@ -142,49 +166,19 @@ def login_process(request):
         return redirect(reverse('login'))
     return log_user_in(request, result[1])
 
-def print_messages(request, message_list):
-    for message in message_list:
-        messages.add_message(request, messages.ERROR, message)
-
-def log_user_in(request, user):
-    request.session['user'] = user.id
-    return redirect(reverse('user'))
-
 def logout(request):
-    user = User.manager.get(id=request.session['user'])
+    user = User.manager.get(id=request.session['user']) # ??? Why this line ???
     request.session.pop('user')
     return redirect(reverse('main'))
 
-def add_travel(request):
-    errors = []
-    print request.POST['end']
-    if len(request.POST['destination']) < 1:
-        errors.append('Destination can not be empty')
-    if len(request.POST['plan']) < 1:
-        errors.append('Description can not be empty')
-    if len(request.POST['start']) < 1:
-        errors.append('Travel Date From can not be empty')
-    if len(request.POST['end']) < 1:
-        errors.append('Travel Date To can not be empty')
-    if request.POST['end'] < request.POST['start']:
-        errors.append('Travel Date To can not be earlier than Travel Date From')
-    if len(errors) > 0:
-        print errors
-        print_messages(request, errors)
-        return redirect(reverse('add'))
-
-    creator = User.objects.get(id = request.session['user'])
-
-    if 'image' in request.FILES:
-        # request.FILES['image'].name = creator.username + "_" + request.POST['destination'][:8]
-        Travel.objects.create(travel_image = request.FILES['image'], user_id = creator, destination=request.POST['destination'], plan=request.POST['plan'], start=request.POST['start'], end=request.POST['end'])
-    else:
-        Travel.objects.create(user_id = creator, destination=request.POST['destination'], plan=request.POST['plan'], start=request.POST['start'], end=request.POST['end'])
-
-    return redirect(reverse('user'))
 
 def join(request, travel_id):
     user = User.objects.get(id = request.session['user'])
     travel = Travel.objects.get(id = travel_id)
     join = Join.objects.create(travel_id = travel, user_id = user)
     return redirect(reverse('user'))
+
+
+# when adding a travel and making a mistake information you typed in gets rubbed out
+# html get a form page so everything doesn't repeat on every page
+# do a seperate thing for travels and joins they repeat on every page -----> tried, same amount of space

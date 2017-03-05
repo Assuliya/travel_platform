@@ -50,6 +50,25 @@ class UserManager(models.Manager):
         errors.append("Sorry, no username found. Please try again.")
         return (False, errors)
 
+class TravelManager(models.Manager):
+    def validateAddTravel(self, request):
+        errors = []
+        if len(request.POST['destination']) < 1:
+            errors.append('Destination can not be empty')
+        if len(request.POST['plan']) < 1:
+            errors.append('Description can not be empty')
+        if len(request.POST['start']) < 1:
+            errors.append('Travel Date can not be empty')
+        if len(request.POST['end']) < 1:
+            errors.append('Travel Date To can not be empty')
+        if request.POST['end'] < request.POST['start']:
+            errors.append('Travel Date To can not be earlier than Travel Date From')
+        if len(errors) > 0:
+            return (False, errors)
+        return (True, errors)
+
+
+
 
 class User(models.Model):
       username = models.CharField(max_length=45)
@@ -73,6 +92,8 @@ class Travel(models.Model):
       user_id = models.ForeignKey(User, related_name='travel_create')
       created_at = models.DateTimeField(auto_now_add=True)
       updated_at = models.DateTimeField(auto_now=True)
+      objects = models.Manager()
+      manager = TravelManager()
 
       def __unicode__(self):
           return u"%s" % (self.destination)

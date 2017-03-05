@@ -47,7 +47,7 @@
               {% if plan.user_id.id != request.session.user %}
                 <div class="col-sm-4">
                   <div class="thumbnail">
-                    <img src='{{plan.travel_image.url}}' class="img-responsive" style="width:100%" alt="piture">
+                    <img src='{{plan.travel_image.url}}' class="img-responsive" style="width: auto;height: auto;max-height: 300px;max-width: 100%;" alt="piture">
                     <h3><a href="{% url 'travel' travel_id=plan.id%}">{{plan.destination}}</a></h3>
                     <p>About: {{plan.plan}}</p>
                     <p>{{plan.user_id.username}}</p>
@@ -73,7 +73,7 @@
               {% if plan.user_id.id != request.session.user %}
                 <div class="col-sm-4">
                   <div class="thumbnail">
-                    <img src='{{plan.travel_image.url}}' class="img-responsive" style="width:100%" alt="piture">
+                    <img src='{{plan.travel_image.url}}' class="img-responsive" style="width: auto;height: auto;max-height: 300px;max-width: 100%;" alt="piture">
                     <h3><a href="{% url 'travel' travel_id=plan.id%}">{{plan.destination}}</a></h3>
                     <p>About: {{plan.plan}}</p>
                     <p>{{plan.user_id.username}}</p>
@@ -99,7 +99,7 @@
               {% if plan.user_id_id != request.session.user%}
                 <div class="col-sm-4">
                   <div class="thumbnail">
-                    <img src='/media/{{plan.travel_image}}' class="img-responsive" style="width:100%" alt="piture">
+                    <img src='/media/{{plan.travel_image}}' class="img-responsive" style="width: auto;height: auto;max-height: 300px;max-width: 100%;" alt="piture">
                     <h3><a href="{% url 'travel' travel_id=plan.id%}">{{plan.destination}}</a></h3>
                     <p>Number of people joined: {{plan.count}}</p>
                     <p>About: {{plan.plan}}</p>

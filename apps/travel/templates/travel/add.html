@@ -50,7 +50,7 @@
                     {% endfor %}
                   </div>
               {% endif %}
-              <form class="black" role="form" action="{% url 'add_travel' %}" method='post' enctype="multipart/form-data">
+              <form class="black" role="form" action="{% url 'add' %}" method='post' enctype="multipart/form-data">
                  {% csrf_token %}
                  <div class="form-group">
                    <label for="image">Image (optional):</label>
